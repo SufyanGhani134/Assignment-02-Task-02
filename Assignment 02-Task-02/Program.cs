@@ -62,11 +62,13 @@ namespace Assignment_02_Task_02
     public class SavingsAccount : BankAccount, ITransaction
     {
         public long InterestRate;
+        public List<Transaction> TransactionList;
         public SavingsAccount(string AccountNumber, string HolderName, double Balance, long interestRate, AccountCatogeroy accountType) :
             base(AccountNumber, HolderName, Balance)
         {
             accountType.AddAccount(this);
             InterestRate = interestRate;
+            TransactionList = new List<Transaction>();
         }
 
         public override void Deposit(double amount)
@@ -90,6 +92,9 @@ namespace Assignment_02_Task_02
         {
             Deposit(amount);
             PrintTransaction(amount);
+            Transaction transaction = new Transaction("deposit", DateTime.Now, amount);
+            TransactionList.Add(transaction);
+
         }
 
         public void PrintTransaction(double amount)
@@ -179,6 +184,19 @@ namespace Assignment_02_Task_02
             DisplayAccountInfo();
         }
     }
+
+    public class Transaction
+    {
+        public string Type;
+        public DateTime DateAndTime;
+        public double TransactionAmount;
+        public Transaction(string type, DateTime dateAndtime, double transactionAmount)
+        {
+            Type = type;
+            DateAndTime = dateAndtime;
+            TransactionAmount = transactionAmount;
+        }
+    }
     public class Bank
     {
         public List<AccountCatogeroy> AccountTypes;
@@ -234,7 +252,7 @@ namespace Assignment_02_Task_02
             SavingsAccount Ben = new SavingsAccount("ABC123456", "Ben", 100, 5, savingsAccount);
             SavingsAccount Henry = new SavingsAccount("XYZ987654", "Henry", 230,2, savingsAccount);
             Ben.ExecuteTransaction(100);
-            Ben.ExecuteTransaction(100);
+            Ben.ExecuteTransaction(800);
 
             bank.AddAccount(savingsAccount);
 
